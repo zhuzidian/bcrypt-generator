@@ -27,9 +27,17 @@ func main() {
 
 	var hashPasswordArray []string
 	for _, password := range plainPasswordArray {
-		if strings.TrimSpace(password) == "" {
+		// ハッシュしたものをskip
+		if len(password) == 60 {
+			hashPasswordArray = append(hashPasswordArray, password)
 			continue
 		}
+		// 空白行
+		if strings.TrimSpace(password) == "" {
+			hashPasswordArray = append(hashPasswordArray, "")
+			continue
+		}
+		// パスワードをハッシュ
 		hash, err := bcrypt.GenerateFromPassword([]byte(strings.TrimSpace(password)), *cost)
 		if err != nil {
 			log.Fatal(err)
